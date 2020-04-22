@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "152196899399",
+    "firebase_url": "https://roomreserve-18582.firebaseio.com",
+    "project_id": "roomreserve-18582",
+    "storage_bucket": "roomreserve-18582.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152196899399:android:919057662c984cbe1a0762",
+        "android_client_info": {
+          "package_name": "com.example.myapplicationaaaa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152196899399-q571e967lkng1fdm66ndgkvpq6jedi7g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myapplicationaaaa",
+            "certificate_hash": "80ed8a8bf444b3c13aaaf35fcbc7509dafa5568f"
+          }
+        },
+        {
+          "client_id": "152196899399-bttidlg9ga4gugvtjbbi4eu9gq80v47a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1Qhh0jMIpT0qTmS7LjzuwGsrkuT1qObQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152196899399-bttidlg9ga4gugvtjbbi4eu9gq80v47a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
