@@ -74,7 +74,9 @@ public class Reservation implements Serializable {
         this.roomId = roomId;
     }
     public String toString(){
-        return " "+getUserId() + getPurpose()+getFromTime()+getToTime()+ " ROOM ID:>"+getRoomId();
+        return "Reservation №:"+ getId()+" for '" + getPurpose() + "' starting at: "+ getFromTime() + "till: " + getToTime() + "at room " + getRoomId()
+
+                ;
     }
 
 }

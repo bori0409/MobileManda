@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BookingActivity  extends AppCompatActivity{
+public class BookingActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     public static final String ROOM = "room";
@@ -41,31 +42,38 @@ public class BookingActivity  extends AppCompatActivity{
 
     private static final String tag = "OPLOG";
     private static final String tag2 = "OPLOGY";
+    private static final String tag3 = "TIMEFUCK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(tag2,"something NOW INI");
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        Room room = (Room) intent.getSerializableExtra(ROOM);
+
+        Log.d(tag2, "something NOW INI");
+        Log.d(tag, " " + room.getId());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.booking);
 
         EditText fromTime = (EditText) findViewById(R.id.editText);
         fromTime.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            calendar = Calendar.getInstance();
-                                            currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-                                            currentMinute = calendar.get(Calendar.MINUTE);
-                                            timePickerDialog = new TimePickerDialog(BookingActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                                                @Override
-                                                public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+            @Override
+            public void onClick(View view) {
+                calendar = Calendar.getInstance();
+                currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+                currentMinute = calendar.get(Calendar.MINUTE);
+                timePickerDialog = new TimePickerDialog(BookingActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
 
-                                                    fromTime.setText(String.format("%02d:%02d", hourOfDay, minutes));
-                                                }
-                                            }, currentHour, currentMinute, false);
+                        fromTime.setText(String.format("%02d:%02d", hourOfDay, minutes));
+                    }
+                }, currentHour, currentMinute, false);
 
-                                            timePickerDialog.show();
-                                        }
+                timePickerDialog.show();
+            }
         });
         EditText toTime = (EditText) findViewById(R.id.editText4);
         toTime.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +86,7 @@ public class BookingActivity  extends AppCompatActivity{
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
 
-                        toTime.setText(String.format("%02d:%02d", hourOfDay, minutes) );
+                        toTime.setText(String.format("%02d:%02d", hourOfDay, minutes));
                     }
                 }, currentHour, currentMinute, false);
 
@@ -98,7 +106,7 @@ public class BookingActivity  extends AppCompatActivity{
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                               datetime.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                datetime.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
 
                             }
                         }, year, month, day);
@@ -107,64 +115,73 @@ public class BookingActivity  extends AppCompatActivity{
         }));
 
     }
-   // EditText reason = findViewById(R.id.editText7);
+    // EditText reason = findViewById(R.id.editText7);
 
-   // Room room= new Room();
+    // Room room= new Room();
     public void makingTheBooking(View view) throws ParseException, JSONException {
-        Log.d(tag2,"button CLICKED MF");
+        //RoomReservationService service = ApiSet.createReserstr();
+        RoomReservationService service = ApiSet.createReser();
+        Log.d(tag2, "button CLICKED MF");
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUsers = mAuth.getCurrentUser();
 
-        Log.d(tag2,"Here "+ currentUsers.getUid());
-        Log.d(tag,"We are inside the method now" );
+        Log.d(tag2, "Here " + currentUsers.getUid());
+        Log.d(tag, "We are inside the method now");
         EditText datetime = (EditText) findViewById(R.id.editText3);
-                EditText fromTime = (EditText) findViewById(R.id.editText);
+        EditText fromTime = (EditText) findViewById(R.id.editText);
         EditText toTime = (EditText) findViewById(R.id.editText4);
         EditText reason = (EditText) findViewById(R.id.reason);
         // Date to Epoch for FROM
-       String datestringfrom  =" "+ datetime.getText() +" "+fromTime.getText();
+        String datestringfrom = " " + datetime.getText() + " " + fromTime.getText();
 
+        // geting the date FROM
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date datefrom = df.parse(datestringfrom);
         long epochwitht = datefrom.getTime();
-        long realepochfrom = epochwitht/1000;
+        long realepochfrom = epochwitht / 1000;
         //Date to Epoch for TO
-        String datestringto  =" "+ datetime.getText() +" "+toTime.getText();
+
+
+        String datestringto = " " + datetime.getText() + " " + toTime.getText();
 
         SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Date dateto = df2.parse(datestringfrom);
-        long epochwitht2 = datefrom.getTime();
-        long realepochto = epochwitht/1000;
+        Date dateto = df2.parse(datestringto);
+        long epochwitht2 = dateto.getTime();
+        long realepochto = epochwitht2 / 1000;
+
+        Log.d(tag3, "Time before EPACH FROM " + datetime.getText() + " " + fromTime.getText() + " TIME before epoach TO" + datetime.getText() + " " + toTime.getText());
+
+        Log.d(tag, "dataformat" + datestringfrom);
+        Log.w(tag, "dataformat" + datestringto);
+        Log.d(tag2, "something");
 
 
-
-       Log.d(tag,"dataformat"+ datestringfrom);
-        Log.w(tag,"dataformat"+ datestringfrom);
-        Log.d(tag2,"something");
-
-
-        Log.d(tag,"Tova" + realepochfrom);
-      //  Toast.makeText(getApplicationContext(),"Your booking is on:" + datetime.getText()+"  from / to "+fromTime.getText()+" / "+ toTime.getText() + reason.getText(),Toast.LENGTH_SHORT).show();
+        Log.d(tag, "Tova" + realepochfrom);
+        //  Toast.makeText(getApplicationContext(),"Your booking is on:" + datetime.getText()+"  from / to "+fromTime.getText()+" / "+ toTime.getText() + reason.getText(),Toast.LENGTH_SHORT).show();
 //CreateBooking();
 
 
-        String reasome= reason.getText().toString();
-        RoomReservationService service = ApiSet.getRoomService();
+        String reasome = reason.getText().toString();
+        //RoomReservationService service = ApiSet.getRoomService();
         Reservation reservation = new Reservation();
         Intent intent = getIntent();
         intent.getExtras();
 
-        Room room =(Room) intent.getSerializableExtra(ROOM);
-        Log.d(tag,"Room should be this "+ room.getName()+ "  " +room.getId());
+        Room room = (Room) intent.getSerializableExtra(ROOM);
+        Log.d(tag, "Room should be this " + room.getName() + "  " + room.getId());
         //Creating the reservation model
-       //JSONObject jsonObject;
-        reservation.setPurpose(reasome );
+        //JSONObject jsonObject;
+        reservation.setPurpose(reasome);
         reservation.setFromTime(Math.toIntExact(realepochfrom));
         reservation.setToTime(Math.toIntExact(realepochto));
         reservation.setUserId(currentUsers.getUid());
-        Log.d(tag,"Tova-------" + realepochfrom + realepochto);
         reservation.setRoomId(room.getId());
-        String userId = "56B";
+
+        reservation.setId(2);
+        Log.d(tag, "OBJECT THAT IM SENDING IS " + reservation.getRoomId() + " " + reservation.getFromTime() + " TO " + reservation.getToTime());
+
+        //  reservation.setRoomId(room.getId());
+        //String userId = "56B";
         /*String jsonString = new JSONObject()
                 .put("id", "56")
                 .put("fromTime",realepochfrom )
@@ -178,11 +195,15 @@ public class BookingActivity  extends AppCompatActivity{
 
         //reservation.setUserId(userId);
         //just to set the id
-       // reservation.setId(556);
+        // reservation.setId(556);
         //reservation
-        Log.d(tag2,"something2");
+        Log.d(tag2, "something2");
         Call<Reservation> call = service.createReser(reservation);
-        Log.d(tag2,"something3");
+
+        Log.d(tag2, "something3");
+        Log.d(tag3, "OBJECT NEW" + reservation.toString());
+        // kinda working
+
         call.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
@@ -196,38 +217,61 @@ public class BookingActivity  extends AppCompatActivity{
                     Log.d(tag,"This is in the ELSE" + response.code() + response.message());
                     Log.d(tag2, response.message());
                     Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "OPPS ERROR", Toast.LENGTH_SHORT);
                     Log.d(tag2,"object" +reservation.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<Reservation> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Something went wrong, try againy",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
                 Log.d(tag,"It is wrong AGAIG ON FAILURE ");
                Log.d(tag,"this is tghe  " + t.getMessage() +"    " + t.toString()+ "    "+t.getCause());
                 Log.d(tag,"this is the object  " + reservation.getPurpose().toString() + " "+ reservation.getUserId());
+                Log.d(tag ,reservation.toString());
+                finish();
+                Intent intent= new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
 
 
                 //
 
             }
         });
-      /*  Call<String> call2=service.createReserstr(jsonString);
-        call2.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Toast.makeText(getApplicationContext(),"Reservation made successfully",Toast.LENGTH_LONG).show();
+/*
+        // TRY WITH SRTING
+        JSONObject jsonString = new JSONObject();
+        jsonString.put("id" , 2);
+        jsonString.put("fromTime", reservation.getFromTime());
+        jsonString.put("toTime", reservation.getToTime());
+        jsonString.put("userId", reservation.getUserId());
+        jsonString.put("purpose", reservation.getPurpose());
+        jsonString.put("roomId", reservation.getRoomId());
 
-            }
+        //Json try 2
+        Call<String> stringCall = service.createReserstr(jsonString.toString());
+       stringCall.enqueue(new Callback<String>() {
+           @Override
+           public void onResponse(Call<String> call, Response<String> response) {
+               if(response.isSuccessful()){Toast.makeText(getApplicationContext(),"Reservation made successfully",Toast.LENGTH_LONG).show();
+                   Log.d(tag,"This is in the IF" + response.code());
+                    finish();
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Something went WRONG",Toast.LENGTH_LONG).show();
-            }
-        });*/
+               }
+               else {Log.d(tag,"This is in the ELSE" + response.code() + response.message());
+                   Log.d(tag2, response.message());
+                   Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG);
+                   Log.d(tag," json " + jsonString.toString());
 
+               }
+           }
 
+           @Override
+           public void onFailure(Call<String> call, Throwable t) {
 
+           }
+       });
+*/
     }
 }
 
